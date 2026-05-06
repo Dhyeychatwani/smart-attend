@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+
+# Data (do not commit real student photos or logs)
+data/known_faces/*.jpg
+data/known_faces/*.png
+data/encodings.pkl
+data/attendance_logs/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

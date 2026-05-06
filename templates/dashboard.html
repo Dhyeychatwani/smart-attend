@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartAttend Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎓 Smart<span>Attend</span></div>
+  <p class="subtitle">AI-Powered Attendance Dashboard</p>
+</header>
+
+<main>
+
+  <div class="summary-cards">
+    <div class="card">
+      <div class="label">Present Today</div>
+      <div class="big">{{ total }}</div>
+    </div>
+    <div class="card">
+      <div class="label">Viewing</div>
+      <div class="big">{{ selected_date if selected_date else 'All Dates' }}</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <form method="get" action="/">
+      <select name="date" onchange="this.form.submit()">
+        <option value="">All Dates</option>
+        {% for d in dates %}
+        <option value="{{ d }}" {% if d == selected_date %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <a class="export-btn" href="/export{% if selected_date %}?date={{ selected_date }}{% endif %}">
+      ⬇ Export CSV
+    </a>
+  </div>
+
+  <div class="table-wrap">
+    {% if records %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ r.Name }}</strong></td>
+          <td>{{ r.Date }}</td>
+          <td>{{ r.Time }}</td>
+          <td><span class="badge present">Present</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">
+      <div class="emoji">📋</div>
+      <p>No attendance records found.</p>
+      <p class="hint">Run <code>python src/mark_attendance.py</code> to start marking.</p>
+    </div>
+    {% endif %}
+  </div>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
